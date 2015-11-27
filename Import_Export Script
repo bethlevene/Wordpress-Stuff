@@ -1,0 +1,218 @@
+// File copied from the work of: Thomas Goirand
+// Located at the following URL: https://tgoirand.wordpress.com/2010/04/22/exporting-importing-users-in-alfresco/
+//
+
+import java.util.*;
+import org.alfresco.service.cmr.security.*;
+import org.alfresco.service.namespace.*;
+import org.alfresco.service.cmr.repository.*;
+import org.alfresco.model.*;
+import org.alfresco.service.cmr.security.*;
+import org.alfresco.service.cmr.search.*;
+import org.alfresco.util.*;
+ 
+org.springframework.context.ApplicationContext ctx = org.alfresco.util.ApplicationContextHelper.getApplicationContext();
+org.alfresco.service.ServiceRegistry serviceRegistry = (org.alfresco.service.ServiceRegistry) ctx.getBean(org.alfresco.service.ServiceRegistry.SERVICE_REGISTRY);
+org.alfresco.service.cmr.security.AuthenticationService authenticationService = serviceRegistry.getAuthenticationService();
+org.alfresco.service.cmr.model.FileFolderService ffs = serviceRegistry.getFileFolderService();
+ 
+serviceRegistry.getAuthenticationService().authenticate("admin", "admin".toCharArray());
+NodeService nodeService = serviceRegistry.getNodeService();
+AuthorityService pubAuthorityService = (AuthorityService) ctx.getBean("AuthorityService");
+PersonService personService = serviceRegistry.getPersonService();
+ 
+OutputStream out = new FileOutputStream(new File("import-users.bsh"));
+ 
+void wline(String line) {
+ out.write(line.getBytes());
+ out.write('\n');
+}
+ 
+// Write import and some functions required for the import.
+wline("import java.util.*;");
+wline("import org.alfresco.service.cmr.security.*;");
+wline("import org.alfresco.service.namespace.*;");
+wline("import org.alfresco.service.cmr.repository.*;");
+wline("import org.alfresco.model.*;");
+wline("import org.alfresco.service.cmr.security.*;");
+wline("import org.alfresco.service.cmr.search.*;");
+wline("import org.alfresco.util.*;");
+ 
+wline("");
+wline("org.springframework.context.ApplicationContext ctx = org.alfresco.util.ApplicationContextHelper.getApplicationContext();");
+wline("org.alfresco.service.ServiceRegistry serviceRegistry = (org.alfresco.service.ServiceRegistry) ctx.getBean(org.alfresco.service.ServiceRegistry.SERVICE_REGISTRY);");
+wline("org.alfresco.service.cmr.security.AuthenticationService authenticationService = serviceRegistry.getAuthenticationService();");
+wline("org.alfresco.service.cmr.model.FileFolderService ffs = serviceRegistry.getFileFolderService();");
+wline("SearchService searchService = serviceRegistry.getSearchService();");
+wline("PersonService personService = serviceRegistry.getPersonService();");
+wline("AuthorityService pubAuthorityService = (AuthorityService) ctx.getBean(\"AuthorityService\");");
+wline("serviceRegistry.getAuthenticationService().authenticate(\"admin\", \"admin\".toCharArray());");
+wline("");
+wline("NodeRef getNodeFromPath(String p) {");
+wline("    SearchParameters sp = new SearchParameters();");
+wline("    sp.setLanguage(SearchService.LANGUAGE_LUCENE);");
+wline("    sp.setQuery(\"PATH:\\\"\" + p + \"\\\"\");");
+wline("    sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);");
+wline("    org.alfresco.service.cmr.search.ResultSet results = searchService.query(sp);");
+wline("    if (results.length() > 0)");
+wline("        return results.getRow(0).getNodeRef();");
+wline("    else");
+wline("        return null;");
+wline("}");
+wline("");
+wline("// check alf version");
+wline("boolean alfIsSup30 = true;");
+wline("java.lang.reflect.Method[] m = Class.forName(\"org.alfresco.service.cmr.security.AuthorityService\").getMethods();");
+wline("for (int i = 0; i < m.length; i++)");
+wline("\tif (m[i].getName().equals(\"createAuthority\") && m[i].getParameterTypes().length == 3 && m[i].getParameterTypes()[1].equals(java.lang.String.class) && m[i].getParameterTypes()[2].equals(java.lang.String.class))");
+wline("\t\talfIsSup30 = false;");
+wline("");
+ 
+wline("void wrapCreateAuthority(Set parent, String child) {");
+wline("    if (alfIsSup30) {");
+wline("        if (!pubAuthorityService.authorityExists(child)) {");
+wline("            print (\"create group \" + child);");
+wline("            pubAuthorityService.createAuthority(AuthorityType.GROUP, child.replaceAll(\"^GROUP_\", \"\"));");
+wline("        } ");
+wline("        if (parent != null) {");
+wline("            for (Iterator j = parent.iterator(); j.hasNext();) {");
+wline("                String groupparent = (String) j.next();");
+wline("                if (!pubAuthorityService.authorityExists(groupparent)) {");
+wline("                    print (\"create group \" + groupparent);");
+wline("                    pubAuthorityService.createAuthority(AuthorityType.GROUP, groupparent.replaceAll(\"^GROUP_\", \"\"));");
+wline("                } ");
+wline("                if (!pubAuthorityService.getContainedAuthorities(AuthorityType.GROUP, groupparent, false).contains(child)) {");
+wline("                    print (\"add group \" + child + \" to \" + groupparent);");
+wline("                    pubAuthorityService.addAuthority(groupparent, child);");
+wline("                }");
+wline("            }");
+wline("        }");
+wline("    } else {");
+wline("        if (parent != null) {");
+wline("            for (Iterator j = parent.iterator(); j.hasNext();) { ");
+wline("                String groupparent = (String) j.next();");
+wline("                print(\"create group \" + child.replaceAll(\"^GROUP_\", \"\") + \" for parent \" + groupparent);");
+wline("                pubAuthorityService.addAuthority(AuthorityType.GROUP, groupparent, child.replaceAll(\"^GROUP_\", \"\"));");
+wline("            }");
+wline("        } else {");
+wline("            print(\"create group \" + child.replaceAll(\"^GROUP_\", \"\"));");
+wline("            pubAuthorityService.createAuthority(AuthorityType.GROUP, null, child.replaceAll(\"^GROUP_\", \"\"));");
+wline("        }");
+wline("    }");
+wline("}");
+ 
+// method to generate user space
+void genSpaces(NodeRef node) {
+ List list = new ArrayList();
+ NodeRef searchNode =  node;
+ while (searchNode != null) {
+ list.add(searchNode);
+ searchNode = nodeService.getPrimaryParent(searchNode).getParentRef();
+ String creator = (String)nodeService.getProperty(searchNode, QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, "creator"));
+ if (creator == null || creator.equals("System"))
+ searchNode = null;
+ }
+ Collections.reverse(list);
+ 
+ if (list.size() > 1) {
+ Iterator it = list.iterator();
+ while (it.hasNext()) {
+ NodeRef nodeRef = (NodeRef)it.next();
+ wline("\tif (getNodeFromPath(\"" + nodeService.getPath(nodeRef).toPrefixString(serviceRegistry.getNamespaceService()) + "\") == null)");
+ wline("\t\tffs.create(getNodeFromPath(\"" + nodeService.getPath(nodeService.getPrimaryParent(nodeRef).getParentRef()).toPrefixString(serviceRegistry.getNamespaceService()) + "\"), \"" + nodeService.getProperty(nodeRef, QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, "name")) + "\", ContentModel.TYPE_FOLDER);");
+ }
+ }
+}
+ 
+int groupnb = 0;
+void genGroups(Collection groups) {
+ for (Iterator j = groups.iterator(); j.hasNext();) {
+ String group = (String) j.next();
+ String nameVar = "group_" + groupnb++;
+ Set outerGroups = pubAuthorityService.getContainingAuthorities(AuthorityType.GROUP, group, true);
+ wline("Set " + nameVar + " = new TreeSet();");
+ // grap parents
+ if (outerGroups.size() > 0) { // they're subgroups
+ for (Iterator itOut = outerGroups.iterator(); itOut.hasNext();) {
+ String parent = (String)itOut.next();
+ print("export " + group + " from parent " + parent);
+ wline(nameVar + ".add(\"" + parent.replaceAll("\"", "\\\"") + "\");");
+ }
+ print("export " + group);
+ wline("wrapCreateAuthority(" + nameVar + ", \"" + group + "\");");
+ } else {
+ print("export root " + group);
+ wline("wrapCreateAuthority(null, \"" + group + "\");");
+ }
+ }
+}
+ 
+// create groups
+Set rootAuthorities = pubAuthorityService.getAllRootAuthorities(AuthorityType.GROUP);
+ 
+List groups = new ArrayList();
+ 
+for (Iterator it = rootAuthorities.iterator(); it.hasNext();) {
+ String group = (String)it.next();
+ if (pubAuthorityService.getContainingAuthorities(AuthorityType.GROUP, group, true).size() == 0) {
+ groups.add(group);
+ }
+}
+ 
+for (int i = 0; i < groups.size(); i++)
+ groups.addAll(pubAuthorityService.getContainedAuthorities(AuthorityType.GROUP, groups.get(i), true));
+ 
+genGroups(groups);
+ 
+String escAndTrim(String val) {
+ if (val == null)
+ return null;
+ return val.trim().replaceAll("\"", "\\\"");
+}
+ 
+// method to generate user creation
+void genCreateUser(NodeRef person) {
+ String userName = escAndTrim(nodeService.getProperty(person, QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, "userName")));
+ print("export " + userName);
+ wline("if (!personService.personExists(\"" + userName + "\")) {");
+ wline("\tprint(\"create user " + userName + "\");");
+ genSpaces(nodeService.getProperty(person, QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, "homeFolder")));
+ 
+ Map props = nodeService.getProperties(person);
+ wline("\tPropertyMap personProps = new PropertyMap();");
+ 
+ for (Iterator it2 = props.keySet().iterator(); it2.hasNext(); ) {
+ QName key = (QName)it2.next();
+ if (key.getNamespaceURI().equals(NamespaceService.CONTENT_MODEL_1_0_URI)) {
+ if (key.getLocalName().equals("homeFolder"))
+ wline("\tpersonProps.put(QName.createQName(\"" + key.getNamespaceURI() + "\", \"" + key.getLocalName() + "\"), getNodeFromPath(\"" + nodeService.getPath(props.get(key)).toPrefixString(serviceRegistry.getNamespaceService()) + "\"));");
+ else
+ wline("\tpersonProps.put(QName.createQName(\"" + key.getNamespaceURI() + "\", \"" + key.getLocalName() + "\"), \"" + escAndTrim("" + props.get(key)) + "\");");
+ }
+ }
+ 
+ wline("\tpersonService.createPerson(personProps);");
+ wline("}");
+ 
+ // add authority
+ Set authorities = pubAuthorityService.getAuthoritiesForUser(userName);
+ for (Iterator authIt = authorities.iterator(); authIt.hasNext(); ) {
+ String groupName = (String)authIt.next();
+ wline("if (pubAuthorityService.authorityExists(\"" + groupName + "\")  && (alfIsSup30 && !pubAuthorityService.getContainedAuthorities(AuthorityType.USER, \"" + groupName + "\", false).contains(\"" + userName + "\"))) ");
+ wline("\tpubAuthorityService.addAuthority(\"" + groupName + "\", \"" + userName + "\");");
+ }
+ 
+}
+ 
+Set nodeRefs = personService.getAllPeople();
+for (Iterator itPeople = nodeRefs.iterator(); itPeople.hasNext(); ) {
+ NodeRef person = (NodeRef)itPeople.next();
+ genCreateUser(person);
+}
+ 
+print("done!");
+wline("print(\"done!\");");
+wline("System.exit(0);");
+out.close();
+ 
+System.exit(0);
