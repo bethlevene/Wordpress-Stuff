@@ -4,10 +4,10 @@ ntml.authentication.sso.enabled=false
 ldap.synchronization.synchroniseChangesOnly=false
 ldap.authentication.allowGuestLogin=false
 ldap.authentication.userNameFormat=%s@dca.wa.gov.au
-ldap.authentication.java.naming.provider.url=ldap://dca.wa.gov.au:389
+ldap.authentication.java.naming.provider.url=ldap://DOMAIN.COM:389
 ldap.authentication.defaultAdministratorUserNames=admin,administrator,bob
 ldap.synchronization.active=true
-ldap.synchronization.java.naming.security.principal=@museum.wa.gov.au
+ldap.synchronization.java.naming.security.principal=@DOMAIN.COM
 ldap.synchronization.java.naming.security.credentials=
 ldap.synchronization.groupSearchBase=cn=Security_Groups,ou=Alfresco,dc=dca,dc=wa,dc=gov,dc=au
 ldap.synchronization.userSearchBase=cn=User_Accounts,ou=Alfresco,dc=dca,dc=wa,dc=gov,dc=au
