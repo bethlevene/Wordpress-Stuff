@@ -1,3 +1,8 @@
+### File created form source available here:
+### https://forums.alfresco.com/forum/developer-discussions/add-ons/moved-ldap-configuration-10112008-0305
+
+
+
 # This flag enables use of this LDAP subsystem for authentication. It may be
 # that this subsytem should only be used for synchronization, in which case
 # this flag should be set to false.
