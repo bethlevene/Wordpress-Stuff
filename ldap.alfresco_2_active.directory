@@ -1,0 +1,39 @@
+### AD SSO
+authentication.chain=passthru1:passthru,ldap1:ldap-ad
+alfresco.authentication.authenticateCIFS=false
+ntlm.authentication.sso.enabled=true
+ 
+ldap.authentication.active=false
+ldap.authentication.userNameFormat=%s
+ldap.authentication.allowGuestLogin=false
+ldap.authentication.escapeCommasInBind=false
+ldap.authentication.escapeCommasInUid=false
+ldap.authentication.java.naming.security.authentication=simple
+ldap.authentication.java.naming.factory.initial=com.sun.jndi.ldap.LdapCtxFactory
+ldap.authentication.java.naming.provider.url=ldap://echo.uk.domain.com:389
+ 
+passthru.authentication.authenticateCIFS=true
+passthru.authentication.domain=DOMAIN
+passthru.authentication.servers=DOMAIN\\echo.uk.domain.com,DOMAIN\\jarvis.usa.domain.com
+passthru.authentication.defaultAdministratorUserNames=johnl,markw,administrator,alfresco,sharifu
+ 
+synchronization.synchronizeChangesOnly=false
+synchronization.import.cron=0 0 1 * * ?
+synchronization.syncWhenMissingPeopleLogIn=true
+synchronization.autoCreatePeopleOnLogin=true
+ 
+ldap.synchronization.active=true
+ldap.synchronization.queryBatchSize=1000
+ldap.synchronization.java.naming.security.authenticaton=simple
+ldap.synchronization.java.naming.security.principal=administrator@domain.com
+ldap.synchronization.java.naming.security.credentials=****
+ 
+#ldap.synchronization.groupDifferentialQuery=(&(objectclass=nogroup)(!(modifyTimestamp<\={0})))
+#ldap.synchronization.personQuery=(&(objectclass=user)(userAccountControl\:1.2.840.113556.1.4.803\:\=512))
+#ldap.synchronization.personDifferentialQuery=(& (objectclass=user)(!(modifyTimestamp<\={0})))
+#ldap.synchronization.personQuery=(&(objectclass=user))
+#ldap.synchronization.groupQuery=(objectclass\=group)
+#ldap.synchronization.groupDifferentialQuery=(&(objectclass\=group)(CN\=allusers)(!(modifyTimestamp<\={0})))
+ 
+ldap.synchronization.userSearchBase=ou\=Sites,dc\=domain,dc\=com
+ldap.synchronization.groupSearchBase=cn\=users,dc\=domain,dc\=com
