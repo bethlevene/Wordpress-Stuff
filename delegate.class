@@ -1,0 +1,13 @@
+package my.company;
+
+import org.activiti.engine.delegate.DelegateExecution;
+import org.activiti.engine.delegate.JavaDelegate;
+
+public class MyJavaDelegate implements JavaDelegate {
+
+    public void execute(DelegateExecution execution) throws Exception {
+        System.out.println("Hello from the class delegate");
+        execution.setVariable("var1", "Hello from the class delegate");
+    }
+
+}
