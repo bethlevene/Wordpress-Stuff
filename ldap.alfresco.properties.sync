@@ -1,0 +1,83 @@
+#
+# LDAP Sync
+#
+# This flag enables use of this LDAP subsystem for authentication. It may be
+# that this subsytem should only be used for synchronization, in which case
+# this flag should be set to false.
+ldap.authentication.active=false
+ldap.authentication.java.naming.security.authentication=simple
+
+# This flag enables use of this LDAP subsystem for user and group
+# synchronization. It may be that this subsytem should only be used for
+# authentication, in which case this flag should be set to false.
+ldap.synchronization.active=true
+ldap.authentication.userNameFormat=%s
+ldap.authentication.allowGuestLogin=true
+ldap.authentication.java.naming.provider.url=ldap://domain.local:389
+
+# The default principal to bind with (only used for LDAP sync). This should be a UPN or DN
+ldap.synchronization.java.naming.security.principal=user@domain.local
+
+# The password for the default principal (only used for LDAP sync)
+ldap.synchronization.java.naming.security.credentials=YourPass
+
+# If positive, this property indicates that RFC 2696 paged results should be
+# used to split query results into batches of the specified size. This
+# overcomes any size limits imposed by the LDAP server.
+ldap.synchronization.queryBatchSize=1000
+
+# The query to select all objects that represent the groups to import.
+ldap.synchronization.groupQuery=(&(objectclass\=group)(memberOf\=cn\=Alfresco Groups,ou\=user,dc\=domain,dc\=local))
+
+# The query to select objects that represent the groups to import that have changed since a certain time.
+ldap.synchronization.groupDifferentialQuery=(&(objectclass\=group)(memberOf\=cn\=Alfresco Groups,ou\=user,dc\=domain,dc\=local)(!(modifyTimestamp<\={0})))
+
+# The query to select all objects that represent the users to import.
+ldap.synchronization.personQuery=(&(objectclass\=user)(|(memberOf\=CN\=Developers,OU\=user,DC\=domain,DC\=local)(memberOf\=CN\=Sales,OU\=user,DC\=domain,DC\=local))(userAccountControl\:1.2.840.113556.1.4.803\:\=512))
+
+# The query to select objects that represent the users to import that have changed since a certain time.
+ldap.synchronization.personDifferentialQuery=(&(objectclass\=user)(|(memberOf\=CN\=Developers,OU\=user,DC\=domain,DC\=local)(memberOf\=CN\=Sales,OU\=user,DC\=domain,DC\=local))(userAccountControl\:1.2.840.113556.1.4.803\:\=512)(!(modifyTimestamp<\={0})))
+
+# The group search base restricts the LDAP group query to a sub section of tree on the LDAP server.
+ldap.synchronization.groupSearchBase=dc\=domain,dc\=local
+
+# The user search base restricts the LDAP user query to a sub section of tree on the LDAP server.
+ldap.synchronization.userSearchBase=dc\=domain,dc\=local
+
+# The name of the operational attribute recording the last update time for a group or user.
+ldap.synchronization.modifyTimestampAttributeName=modifyTimestamp
+
+# The timestamp format. Unfortunately, this varies between directory servers.
+ldap.synchronization.timestampFormat=yyyyMMddHHmmss’.0Z’
+
+# The attribute name on people objects found in LDAP to use as the uid in Alfresco
+ldap.synchronization.userIdAttributeName=sAMAccountName
+
+# The attribute on person objects in LDAP to map to the first name property in Alfresco
+ldap.synchronization.userFirstNameAttributeName=givenName
+
+# The attribute on person objects in LDAP to map to the last name property in Alfresco
+ldap.synchronization.userLastNameAttributeName=sn
+
+# The attribute on person objects in LDAP to map to the email property in Alfresco
+ldap.synchronization.userEmailAttributeName=mail
+
+# The attribute on person objects in LDAP to map to the organizational id  property in Alfresco
+ldap.synchronization.userOrganizationalIdAttributeName=company
+
+# The default home folder provider to use for people created via LDAP import
+ldap.synchronization.defaultHomeFolderProvider=userHomesHomeFolderProvider
+
+# The attribute on LDAP group objects to map to the gid property in Alfrecso
+ldap.synchronization.groupIdAttributeName=cn
+
+# The group type in LDAP
+ldap.synchronization.groupType=group
+
+# The person type in LDAP
+ldap.synchronization.personType=user
+
+# The attribute in LDAP on group objects that defines the DN for its members
+ldap.synchronization.groupMemberAttributeName=member
+
+synchronization.synchronizeChangesOnly=true
