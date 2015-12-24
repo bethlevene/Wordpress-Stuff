@@ -1,0 +1,20 @@
+<bean id="someco.workflowBootstrap" parent="workflowDeployer">
+ <property name="workflowDefinitions">
+ <list>
+ <props>
+ <prop key="engineId">activiti</prop>
+ <prop
+key="location">alfresco/extension/workflows/helloWorld.bpmn20.xml</prop>
+ <prop key="mimetype">text/xml</prop>
+ <prop key="redeploy">false</prop>
+ </props>
+ <props>
+ <prop key="engineId">activiti</prop>
+ <prop
+key="location">alfresco/extension/workflows/helloWorldFork.bpmn20.xml</prop>
+ <prop key="mimetype">text/xml</prop>
+ <prop key="redeploy">false</prop>
+ </props>
+</list>
+ </property>
+ </bean>
