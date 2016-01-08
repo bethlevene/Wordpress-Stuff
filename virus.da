@@ -47,7 +47,7 @@ ldap.synchronization.userManager=Manager
 ldap.synchronization.personType=user
 ldap.synchronization.personQuery=(objectclass\=user)
 ldap.synchronization.personDifferentialQuery=user
-ldap.synchronization.userSearchBase=dc\=dca,dc\=wa,dc\=gov,dc\=au
+#ldap.synchronization.userSearchBase=dc\=dca,dc\=wa,dc\=gov,dc\=au
 ldap.synchronization.userOrganizationalIdAttributeName=company
 
 
@@ -56,5 +56,5 @@ ldap.synchronization.groupIdAttributeName=cn
 ladp.synchronization.groupDisplayNameAttributeName=description
 ldap.synchronization.groupType=group
 ldap.synchronization.groupQuery=(objectclass\=group)
-ladp.synchronization.groupSearchBase=ou\=WAM,dc\=dca,dc\=wa,dc\=gov,dc\=au
+#ladp.synchronization.groupSearchBase=ou\=WAM,dc\=dca,dc\=wa,dc\=gov,dc\=au
 ldap.synchronization.groupMemberAttributeName=member
