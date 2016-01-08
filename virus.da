@@ -30,9 +30,8 @@ ldap.synchronization.groupSearchBase=OU=WAM,OU=DCAStaff,DC=dca,DC=wa,DC=gov,DC=a
 ldap.synchronization.userSearchBase=OU=WAM,OU=DCAStaff,DC=dca,DC=wa,DC=gov,DC=au
 ldap.synchronization.syncWhenMissingPeopleLogIn=true
 ldap.synchronization.syncOnStartup=true
-ldap.synchronization.queryBatchSize=0
-ldap.synchronization.attributeBatchSize=0
-ldap.synchronization.groupQuery=(objectclass\=group)
+ldap.synchronization.queryBatchSize=1000
+ldap.synchronization.attributeBatchSize=1000
 ldap.synchronization.autoCreatePeopleOnLogin=true
 ldap.synchronization.import.cron=0 1 * * *
 ldap.synchronization.timestampFormat=yyyyMMddHHmmss'.0Z'
