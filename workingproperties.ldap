@@ -44,8 +44,8 @@ ldap.synchronisation.userIdAttributeName=uid
 ldap.synchronization.defaultHomeFolderProvider=largeHomeFolderProvider
 ldap.synchronization.userManager=Manager
 ldap.synchronization.personType=users
-ldap.synchronization.personQuery=(objectclass\=user)
-ldap.synchronization.personDifferentialQuery=user
+ldap.synchronization.personQuery=(&(objectclass\=user)(memberOf=cn\=Users,ou\=DCAStaff,dc\=wa,dc\=gov,dc=\au))
+ldap.synchronization.personDifferentialQuery=(&(objectclass\=user)(memberOf=cn\=Users,ou\=DCAStaff,dc\=wa,dc\=gov,dc=\au))
 #ldap.synchronization.userSearchBase=dc\=dca,dc\=wa,dc\=gov,dc\=au
 ldap.synchronization.userOrganizationalIdAttributeName=company
 
@@ -53,7 +53,7 @@ ldap.synchronization.userOrganizationalIdAttributeName=company
 ### LDAP  Attribute Mapping Groups ###
 ldap.synchronization.groupIdAttributeName=cn
 ladp.synchronization.groupDisplayNameAttributeName=description
-ldap.synchronization.groupType=groups
+ldap.synchronization.groupType=(&(objectclass\=user)(memberOf=cn\=Users,ou\=DCAStaff,dc\=wa,dc\=gov,dc=\au))
 ldap.synchronization.groupQuery=(objectclass\=group)
 #ladp.synchronization.groupSearchBase=ou\=WAM,dc\=dca,dc\=wa,dc\=gov,dc\=au
 ldap.synchronization.groupMemberAttributeName=member
