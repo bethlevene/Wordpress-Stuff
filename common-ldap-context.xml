@@ -445,6 +445,15 @@
                     <!-- Active Directory: "???" -->
                     <value>${ldap.synchronization.userOrganizationalIdAttributeName}</value>
                 </entry>
+                <!-- Added attributes -->
+                <entry key="cm:telephone">
+                	<value>${ldap.synchronization.userCompanyTelephoneAttributeName}</value>
+                </entry>
+                
+                <entry key="jobtitle">
+                	<value>${ldap.synchronization.userJobTitleAttributeName}</value>
+                </entry>
+                
                 <!-- Always use the default -->
                 <entry key="cm:homeFolderProvider">
                     <null/>
