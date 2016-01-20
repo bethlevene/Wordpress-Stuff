@@ -467,6 +467,12 @@
 		    <value>${ldap.synchronization.userLocationAttributeName}</value>
 
 		</entry>
+		
+		<entry key="cm:mobile">
+			
+			<value>${ldap.synchronization.userMobileAttributeName}</value>
+			
+		</entry>
                 
                 <!-- Always use the default -->
                 <entry key="cm:homeFolderProvider">
