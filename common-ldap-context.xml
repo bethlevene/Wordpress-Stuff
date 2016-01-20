@@ -447,12 +447,26 @@
                 </entry>
                 <!-- Added attributes -->
                 <entry key="cm:telephone">
+                	
                 	<value>${ldap.synchronization.userCompanyTelephoneAttributeName}</value>
                 </entry>
                 
-                <entry key="jobtitle">
+                <entry key="cm:jobtitle">
+                	
                 	<value>${ldap.synchronization.userJobTitleAttributeName}</value>
                 </entry>
+                
+                <entry key="cm:companyaddress1">
+
+		    <value>${ldap.synchronization.usercompanyaddress1AttributeName}</value>
+
+		</entry>
+
+		<entry key="cm:location">
+
+		    <value>${ldap.synchronization.userLocationAttributeName}</value>
+
+		</entry>
                 
                 <!-- Always use the default -->
                 <entry key="cm:homeFolderProvider">
