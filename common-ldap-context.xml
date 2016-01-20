@@ -458,7 +458,19 @@
                 
                 <entry key="cm:companyaddress1">
 
-		    <value>${ldap.synchronization.usercompanyaddress1AttributeName}</value>
+		    <value>${ldap.synchronization.userCompanyAddress1AttributeName}</value>
+
+		</entry>
+		
+		<entry key="cm:companyaddress2">
+
+		    <value>${ldap.synchronization.userCompanyAddress2AttributeName}</value>
+
+		</entry>
+		
+		<entry key="cm:companyaddress3">
+
+		    <value>${ldap.synchronization.userCompanyAddress3AttributeName}</value>
 
 		</entry>
 
