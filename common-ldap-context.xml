@@ -485,6 +485,12 @@
 			<value>${ldap.synchronization.userMobileAttributeName}</value>
 			
 		</entry>
+		
+		<entry key="cm:manager">
+			
+			<value>${ldap.synchronization.userManagerAttributeName}</value>
+			
+		</entry>
                 
                 <!-- Always use the default -->
                 <entry key="cm:homeFolderProvider">
