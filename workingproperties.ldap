@@ -35,6 +35,7 @@ ldap.synchronization.attributeBatchSize=1000
 ldap.synchronization.autoCreatePeopleOnLogin=true
 ldap.synchronization.import.cron=0 0 12 * *
 ldap.synchronization.timestampFormat=yyyyMMddHHmmss'.0Z'
+ldap.synchronization.allowDeletions=false
 
 ### LDAP  Attribute Mapping Users ###
 ldap.synchronization.userLastNameAttributeName=sn
