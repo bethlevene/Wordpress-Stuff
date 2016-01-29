@@ -1,0 +1,143 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE beans PUBLIC '-//SPRING//DTD BEAN//EN' 'http://www.springframework.org/dtd/spring-beans.dtd'>
+<!--
+   Bean definitions shared by the ldap and ldap-ad subsystems
+-->
+
+<beans>
+  <bean></bean>
+        <property name="personAttributeMapping">
+            <map>
+                <entry key="cm:userName">
+                    <!-- Must match the same attribute as userIdAttributeName -->
+                    <value>${ldap.synchronization.userIdAttributeName}</value>
+                </entry>
+                <entry key="cm:firstName">
+                    <!-- OpenLDAP: "givenName" -->
+                    <!-- Active Directory: "givenName" -->
+                    <value>${ldap.synchronization.userFirstNameAttributeName}</value>
+                </entry>
+                <entry key="cm:lastName">
+                    <!-- OpenLDAP: "sn" -->
+                    <!-- Active Directory: "sn" -->
+                    <value>${ldap.synchronization.userLastNameAttributeName}</value>
+                </entry>
+                <entry key="cm:email">
+                    <!-- OpenLDAP: "mail" -->
+                    <!-- Active Directory: "???" -->
+                    <value>${ldap.synchronization.userEmailAttributeName}</value>
+                </entry>
+                <entry key="cm:organization">
+                    <!-- OpenLDAP: "o" -->
+                    <!-- Active Directory: "???" -->
+                    <value>${ldap.synchronization.userOrganizationalIdAttributeName}</value>
+                </entry>
+                <!-- This deprecated property has been replaced by "cm:organization". We will use the same mapping -->
+                <entry key="cm:organizationId">
+                    <!-- OpenLDAP: "o" -->
+                    <!-- Active Directory: "???" -->
+                    <value>${ldap.synchronization.userOrganizationalIdAttributeName}</value>
+                </entry>
+                <!-- Added attributes -->
+                <entry key="cm:telephone">
+                	
+                	<value>${ldap.synchronization.userCompanyTelephoneAttributeName}</value>
+                </entry>
+                
+                <entry key="cm:jobtitle">
+                	
+                	<value>${ldap.synchronization.userJobTitleAttributeName}</value>
+                </entry>
+                
+                <entry key="cm:companyaddress1">
+
+		    <value>${ldap.synchronization.userCompanyAddress1AttributeName}</value>
+
+		</entry>
+		
+		<entry key="cm:companyaddress2">
+
+		    <value>${ldap.synchronization.userCompanyAddress2AttributeName}</value>
+
+		</entry>
+		
+		<entry key="cm:companyaddress3">
+
+		    <value>${ldap.synchronization.userCompanyAddress3AttributeName}</value>
+
+		</entry>
+
+		<entry key="cm:location">
+
+		    <value>${ldap.synchronization.userLocationAttributeName}</value>
+
+		</entry>
+		
+		<entry key="cm:mobile">
+			
+			<value>${ldap.synchronization.userMobileAttributeName}</value>
+			
+		</entry>
+		
+		<entry key="cm:manager">
+			
+			<value>${ldap.synchronization.userManagerAttributeName}</value>
+			
+		</entry>
+                
+                <!-- Always use the default -->
+                <entry key="cm:homeFolderProvider">
+                    <null/>
+                </entry>
+            </map>
+        </property>
+        <!-- Set a default home folder provider -->
+        <!-- Defaults only apply for values above -->
+        <property name="personAttributeDefaults">
+            <map>
+                <entry key="cm:homeFolderProvider">
+                    <value>${ldap.synchronization.defaultHomeFolderProvider}</value>
+                </entry>
+            </map>
+        </property>
+    
+        <!--
+        This property defines a mapping between attributes held on LDAP group objects and
+        the properties of authorities held in the repository. The key is the QName of an attribute in
+        the repository, the value is the attribute name from the group object in the LDAP repository.     
+        -->
+        <property name="groupAttributeMapping">
+            <map>
+                <entry key="cm:authorityName">
+                    <!-- Must match the same attribute as groupIdAttributeName -->
+                    <value>${ldap.synchronization.groupIdAttributeName}</value>
+                </entry>
+                <entry key="cm:authorityDisplayName">
+                    <!-- OpenLDAP: "description" -->
+                    <!-- Active Directory: "displayName" -->
+                    <value>${ldap.synchronization.groupDisplayNameAttributeName}</value>
+                </entry>
+            </map>
+        </property>
+
+        <property name="enableProgressEstimation">
+            <value>${ldap.synchronization.enableProgressEstimation}</value>
+        </property>
+
+        <!-- Services -->
+        <property name="LDAPInitialDirContextFactory">
+            <ref bean="ldapInitialDirContextFactory"/>
+        </property>
+        <property name="namespaceService">
+            <ref bean="namespaceService"/>
+        </property>
+    </bean>
+
+    <!-- FTP authentication -->
+    <bean id="ftpAuthenticator" class="org.alfresco.filesys.auth.ftp.AlfrescoFtpAuthenticator" parent="ftpAuthenticatorBase">
+        <property name="active">
+            <value>${ldap.authentication.authenticateFTP}</value>
+        </property>
+    </bean>
+
+</beans>
