@@ -5,7 +5,7 @@
 -->
 
 <beans>
-  <bean></bean>
+  <bean>
         <property name="personAttributeMapping">
             <map>
                 <entry key="cm:userName">
