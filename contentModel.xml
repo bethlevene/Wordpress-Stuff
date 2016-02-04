@@ -165,6 +165,8 @@
          <parent>sys:base</parent>
       </type>
 
+<!--- Person attributes added B -->
+
       <type name="cm:person">
          <title>Person</title>
          <parent>cm:authority</parent>
@@ -238,7 +240,7 @@
                   <facetable>true</facetable>
                </index>
             </property>
-            <property name="cm:persondescription">
+            <property name="cm:personDescription">
                 <type>d:content</type>
             </property>
             <property name="cm:telephone">
@@ -247,31 +249,31 @@
             <property name="cm:mobile">
                 <type>d:text</type>
             </property>
-            <property name="cm:companyaddress1">
+            <property name="cm:companyAddress1">
                 <type>d:text</type>
             </property>
-            <property name="cm:companyaddress2">
+            <property name="cm:companyAddress2">
                 <type>d:text</type>
             </property>
-            <property name="cm:companyaddress3">
+            <property name="cm:companyAddress3">
                 <type>d:text</type>
             </property>
-            <property name="cm:companypostcode">
+            <property name="cm:companyPostCode">
                 <type>d:text</type>
             </property>
-            <property name="cm:companytelephone">
+            <property name="cm:companyTelephone">
                 <type>d:text</type>
             </property>
-            <property name="cm:companyfax">
+            <property name="cm:companyFax">
                 <type>d:text</type>
             </property>
-            <property name="cm:companyemail">
+            <property name="cm:companyEmail">
                 <type>d:text</type>
             </property>
             <property name="cm:skype">
                 <type>d:text</type>
             </property>
-            <property name="cm:instantmsg">
+            <property name="cm:instantMsg">
                 <type>d:text</type>
             </property>
             <property name="cm:userStatus">
@@ -280,7 +282,7 @@
             <property name="cm:userStatusTime">
                <type>d:datetime</type>
             </property>
-            <property name="cm:googleusername">
+            <property name="cm:googleUseName">
                <type>d:text</type>
             </property>
             
