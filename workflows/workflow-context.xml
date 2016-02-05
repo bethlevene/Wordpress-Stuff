@@ -8,7 +8,7 @@
       <list>
         <props>
           <prop key="engineId">activiti</prop>
-          <prop key="location">alfresco/extension/workflows/activiti/activitiHelloWorld.bpmn20.xml</prop>
+          <prop key="location">alfresco/extension/bpmn20_examples/PizzaCollaboration.bpmn20.xml</prop>
           <prop key="mimetype">text/xml</prop>
           <prop key="redeploy">false</prop>         
         </props>
